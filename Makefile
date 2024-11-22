@@ -1,6 +1,6 @@
 # SETUP PATHS
 ROOT=..
-SRC=$(ROOT)/detcorpus
+SRC=$(ROOT)/$(DETCORPUS_CATALOGUE)
 vpath %.txt $(SRC)
 vpath %.fb2 $(SRC)
 vpath %.html $(SRC)
