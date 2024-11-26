@@ -34,6 +34,8 @@ docker-local: $(exportfiles) | docker-cleanup
 	echo "Detcorpus is already running in a local docker container. Stop it first to run anew" ;\
 	fi
 
+deploy: $(exportfiles) | docker-cleanup
+	docker run -dit --name $(corpsite) -v $$(pwd)/$(localarch)/vert:/var/lib/manatee/vert -v $$(pwd)/$(localarch)/registry:/var/lib/manatee/registry -p 10.0.0.19:8098:8080 -e CORPLIST="$(corplist)" $(noskeimage)
 
 $(packed) : $(exportfiles)
 	rm -f $@
