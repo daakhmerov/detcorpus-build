@@ -7,6 +7,7 @@ vpath %.html $(SRC)
 vpath %.csv $(SRC)
 vpath %.epub $(SRC)
 vpath %.md $(SRC)
+EXPORT := $(shell mkdir -p export/vert)
 _dummy := $(shell mkdir -p lda)
 #
 # SETUP CREDENTIALS
@@ -132,10 +133,10 @@ detcorpus.wlda.vert: $(vertfiles:.vert=.wlda.vert)
 	@true
 
 detcorpus-nonfiction.vert: detcorpus.wlda.vert
-	gawk -v mode=nonfic -f scripts/ficnonfic.gawk $< > $@
+	gawk -v mode=nonfic -f scripts/ficnonfic.gawk $< > $(patsubst %, export/vert/%, $@)
 
 detcorpus-fiction.vert: detcorpus.wlda.vert
-	gawk -v mode=fic -f scripts/ficnonfic.gawk $< > $@
+	gawk -v mode=fic -f scripts/ficnonfic.gawk $< > $(patsubst %, export/vert/%, $@)
 
 compile: $(corpora-vert)
 
@@ -164,7 +165,7 @@ ldadir:
 lda: $(patsubst %, lda/model%.mallet, $(numtopics)) | ldadir
 
 lda/labels%.txt: lda/summary%.txt
-	sort -nr -k2 -t"        " $< | gawk -F"\t" '{match($$3, /^([^ ]+ [^ ]+ [^ ]+)/, top); gsub(" ", "_", top[1]); printf "%d %d %s\n", NR, $$1, top[1]}' > $@
+	sort -nr -k2 -t" " $< | gawk -F"\t" '{match($$3, /^([^ ]+ [^ ]+ [^ ]+)/, top); gsub(" ", "_", top[1]); printf "%d %d %s\n", NR, $$1, top[1]}' > $@
 
 %.wlda.vert: %.vert $(patsubst %, lda/labels%.txt, $(numtopics)) $(patsubst %,lda/doc-topics%.txt,$(numtopics))
 	python3 scripts/addlda2vert.py -l $(patsubst %,lda%,$(numtopics)) -t $(patsubst %,lda/labels%.txt,$(numtopics)) -d $(patsubst %,lda/doc-topics%.txt,$(numtopics)) -i $< -o $@
