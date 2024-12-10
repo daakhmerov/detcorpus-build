@@ -25,10 +25,10 @@ docker-cleanup: pull-image
 	test -z "$(shell docker ps -aq -f status=exited -f name=$(corpsite))" || @echo docker rm $(corpsite)
 
 deploy-local: $(exportfiles) | docker-cleanup
-	docker run -dit --name $(corpsite) -v $$(pwd)/$(localarch)/vert:/var/lib/manatee/vert -v $$(pwd)/$(localarch)/registry:/var/lib/manatee/registry -p 127.0.0.1:8088:8080 -e CORPLIST="$(corplist)" $(noskeimage)
+	docker run -dit --name $(corpsite) -v $$(pwd)/$(localarch)/vert:/var/lib/manatee/vert -v $$(pwd)/$(localarch)/registry:/var/lib/manatee/registry -p 127.0.0.1:$(TESTPORT):8080 -e CORPLIST="$(corplist)" $(noskeimage)
 
 deploy: $(exportfiles) | docker-cleanup
-	docker run -dit --name $(corpsite) -v $$(pwd)/$(localarch)/vert:/var/lib/manatee/vert -v $$(pwd)/$(localarch)/registry:/var/lib/manatee/registry -p $(ip_addr):8098:8080 -e CORPLIST="$(corplist)" $(noskeimage)
+	docker run -dit --name $(corpsite) -v $$(pwd)/$(localarch)/vert:/var/lib/manatee/vert -v $$(pwd)/$(localarch)/registry:/var/lib/manatee/registry -p $(ip_addr):$(PRODPORT):8080 -e CORPLIST="$(corplist)" $(noskeimage)
 
 $(packed) : $(exportfiles)
 	rm -f $@
