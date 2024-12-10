@@ -7,8 +7,8 @@ vpath %.html $(SRC)
 vpath %.csv $(SRC)
 vpath %.epub $(SRC)
 vpath %.md $(SRC)
-EXPORT := $(shell mkdir -p export/vert)
-_dummy := $(shell mkdir -p lda)
+EXPORT := export/vert
+_dummy := $(shell mkdir -p lda) $(shell mkdir -p export/vert)
 #
 # SETUP CREDENTIALS
 HOST=detcorpus
@@ -133,10 +133,10 @@ detcorpus.wlda.vert: $(vertfiles:.vert=.wlda.vert)
 	@true
 
 detcorpus-nonfiction.vert: detcorpus.wlda.vert
-	gawk -v mode=nonfic -f scripts/ficnonfic.gawk $< > $(patsubst %, export/vert/%, $@)
+	gawk -v mode=nonfic -f scripts/ficnonfic.gawk $< > $(EXPORT)/$@
 
 detcorpus-fiction.vert: detcorpus.wlda.vert
-	gawk -v mode=fic -f scripts/ficnonfic.gawk $< > $(patsubst %, export/vert/%, $@)
+	gawk -v mode=fic -f scripts/ficnonfic.gawk $< > $(EXPORT)/$@
 
 compile: $(corpora-vert)
 
@@ -208,10 +208,13 @@ test-lda: metadata.csv $(patsubst %,lda/doc-topics%.txt,$(numtopics))
 
 ## CLEANUP FOR BUILD
 
-clean: clean-converted
+clean: clean-converted clean-build clean-compiled
 
 clean-converted:
 	$(foreach f, $(vertfiles), rm -f $(f:.vert=.txt)$(NL))
 
 clean-build:
 	$(foreach f, $(vertfiles), rm -f $(f)$(NL))
+
+clean-compiled:
+	rm -f *.vert && rm -f *.vectors
