@@ -1,10 +1,9 @@
 DOCKERHOST := detcorpus
-ip_addr := 10.0.0.19
 noskeimage := maslinych/noske-alt:2.142-alt1
 localarch := export
 remoteroot := corpora
 remotearch := setup
-corplist = $(corpora) 
+corplist = $(corpora)
 configfiles := $(patsubst %,config/%,$(corplist)) 
 corpvertfiles := $(wildcard $(localarch)/vert/*.vert)
 subcfiles := config/detcorpus-fiction.subcorpora
