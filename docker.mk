@@ -18,7 +18,7 @@ $(localarch)/registry/% : config/%
 	cp -f $< $@
 
 deploy: $(exportfiles)
-	docker run -dit --name $(corpsite) -v $$(pwd)/$(localarch)/vert:/var/lib/manatee/vert -v $$(pwd)/$(localarch)/registry:/var/lib/manatee/registry -p $(IP):$(PRODPORT):8080 -e CORPLIST="$(corplist)" $(noskeimage)
+	docker run -dit --name $(corpsite) -v $$(pwd)/$(localarch)/vert:/var/lib/manatee/vert -v $$(pwd)/$(localarch)/registry:/var/lib/manatee/registry -p $(IP):$(PORT):8080 -e CORPLIST="$(corplist)" $(noskeimage)
 
 $(packed) : $(exportfiles)
 	rm -f $@
