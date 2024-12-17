@@ -16,8 +16,6 @@ HOST=detcorpus
 TESTING=testing
 PRODUCTION=production
 ROLLBACK=rollback
-TESTPORT=8088
-PRODPORT=8098
 BUILT=built
 RSYNC=rsync -avP --stats -e ssh
 #
