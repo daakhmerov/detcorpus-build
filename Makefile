@@ -113,7 +113,7 @@ define NL
 endef
 
 .metadata: $(textfiles) $(vertfiles) meta.db $(SRC)/genres.csv scripts/db2meta.py
-	$(foreach f, $(textfiles), sed -i -e '1c $$($(db2meta) -f $(f))' $(basename $(f)).vert$(NL))
+	$(foreach f, $(textfiles), sed -i -e "1c $$($(db2meta) -f $(f))" $(basename $(f)).vert$(NL))
 	touch $@
 
 meta.csv: meta.db scripts/db2meta.py
